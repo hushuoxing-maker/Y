@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>餐饮小吃店门头设计AI · 顶级商业视觉版</title>
+<style>
+*{
+  box-sizing: border-box;
+  margin:0;
+  padding:0;
+}
+body{
+  font-family: "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #FFF7F0 0%, #FFEBD8 100%);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+/* 顶部大标题长条 - 餐饮小吃店专属橙红系 */
+.header{
+  width: 100%;
+  background: linear-gradient(90deg, #FF7A00, #FF4500);
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(255, 122, 0, 0.15);
+}
+.header h1{
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.header p{
+  font-size: 16px;
+  opacity: 0.95;
+}
+/* 内容卡片 */
+.container{
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 45px 40px;
+  box-shadow: 0 10px 40px rgba(255, 122, 0, 0.08);
+}
+/* 输入提示 */
+.input-label{
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: left;
+  font-weight: 500;
+}
+/* 输入框 */
+.input-box{
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 16px;
+  border: 1px solid #DCDFE6;
+  border-radius: 12px;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 22px;
+}
+.input-box:focus{
+  border-color: #FF7A00;
+  box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.1);
+}
+/* 生成按钮 */
+.btn{
+  width: 100%;
+  padding: 17px;
+  background: linear-gradient(90deg, #FF7A00, #FF4500);
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 122, 0, 0.2);
+}
+.btn:disabled{
+  background: #FFC080;
+  cursor: not-allowed;
+  transform: none;
+}
+/* 结果区域 */
+.result{
+  max-width: 800px;
+  margin: 40px auto 0;
+  padding: 0 20px;
+}
+.item{
+  background: #fff;
+  padding: 18px 22px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  font-size: 15px;
+  border-left: 5px solid #FF7A00;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.item-text{
+  flex: 1;
+}
+/* 复制按钮 */
+.copy-btn{
+  padding: 8px 14px;
+  background: #FF7A00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+.copy-btn:hover{
+  background: #E06A00;
+}
+/* 已复制永久灰色样式 */
+.copy-btn.copied{
+  background: #cccccc !important;
+  color: #666666 !important;
+  cursor: default !important;
+}
+/* 一键复制全部 */
+.copy-all-box{
+  text-align: center;
+  margin-top: 20px;
+}
+.copy-all-btn{
+  padding: 12px 24px;
+  background: #FF7A00;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.copy-all-btn:hover{
+  background: #E06A00;
+}
+</style>
+
+<!-- 顶部大标题 -->
+<div class="header">
+  <h1>🍜 餐饮小吃店门头设计AI · 顶级商业视觉版</h1>
+  <p>专注商业街独立门头 · 一键生成10组高转化AI生图提示词</p>
+</div>
+
+<!-- 内容区 -->
+<div class="container">
+  <div class="input-label">在此输入你的需求（行业/店名/风格）：</div>
+  <input type="text" class="input-box" id="input" placeholder="例如：老长沙臭豆腐 小吃店 高饱和红 亚克力立体发光字">
+  <button class="btn" onclick="go()" id="generateBtn">✨ 生成10组提示词</button>
+</div>
+
+<!-- 结果展示区 -->
+<div class="result" id="result"></div>
+
+<script>
+// 餐饮小吃店门头核心配置（完全匹配你的设计约束）
+const 小吃店配置 = {
+  核心风格: "高辨识度、高转化、强餐饮氛围、视觉抓眼球、商业街独立门头、正立面独立店铺、门头覆盖整间店铺宽度",
+  材质库: [
+    "金属烤漆门头", "铝塑板门头", "亚克力立体发光字", "通体发光字"
+  ],
+  配色库: [
+    "红色高饱和主色+中性色搭配", "橙色高饱和主色+辅助色搭配", 
+    "黄色高饱和主色+中性色搭配", "深绿高饱和主色+辅助色搭配"
+  ],
+  字体库: [
+    "清晰有力量感字体", "适合发光表现字体", "层级分明字体", "高对比易识别字体"
+  ],
+  固定必含: "完整正立面、落地玻璃门、品牌名、广告语、主卖点、大小合适的产品海报、购买理由文字排版、差异化卖点、白天自然光、高辨识度、高对比配色、非摊位、非附墙、非临时结构",
+  负向语义: "非摊位、非推车、非夜市临时铺、非挂靠招牌、非附墙门头、非临时结构、非局部门头、无PVC、无KT板、无泡沫、无龙骨、无施工描述、无斜侧视、无夜景、无附墙招牌",
+  附加约束: "落地玻璃门贴品牌防撞条、门头上方显示品牌名和广告语、门头或墙面差异化卖点文字、文字层级清晰主标题最大、排版高级比例好看、白天自然光下清晰可读、发光字突出"
+}
+
+let 当前需求 = ''
+let 所有提示词 = []
+
+// 随机选取指定数量的元素
+function 随机取(arr, min, max) {
+  let count = Math.floor(Math.random() * (max - min + 1)) + min
+  let shuffled = [...arr].sort(() => Math.random() - 0.5)
+  return shuffled.slice(0, count).join('、')
+}
+
+// 生成单条小吃店门头提示词（严格匹配输出规则）
+function 生成单条(需求) {
+  let 材质 = 随机取(小吃店配置.材质库, 2, 3)
+  let 配色 = 随机取(小吃店配置.配色库, 1, 1)
+  let 字体 = 随机取(小吃店配置.字体库, 1, 2)
+  
+  return `${小吃店配置.核心风格}，${需求}，${材质}，${配色}，${字体}，${小吃店配置.附加约束}，${小吃店配置.固定必含}，${小吃店配置.负向语义}，门头正立面效果完全展示`
+}
+
+// 生成10组提示词
+function 生成10组(需求) {
+  var arr = []
+  for(var i=0;i<10;i++){
+    arr.push(生成单条(需求))
+  }
+  return arr
+}
+
+// 复制单条 - 点击后永久变灰
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied')
+  })
+}
+
+// 一键复制全部
+function copyAll() {
+  navigator.clipboard.writeText(所有提示词.join("\n\n")).then(() => {
+    alert("✅ 已复制全部 10 组餐饮小吃店门头提示词！")
+  })
+}
+
+// 核心生成逻辑
+function go() {
+  const btn = document.getElementById('generateBtn')
+  var val = document.getElementById('input').value.trim()
+  
+  if (!val) {
+    alert("请输入你的需求，例如：老长沙臭豆腐 小吃店 高饱和红 亚克力立体发光字")
+    return
+  }
+
+  // 加载状态
+  btn.disabled = true
+  btn.innerText = "⏳ 正在生成..."
+
+  setTimeout(() => {
+    当前需求 = val
+    var list = 生成10组(当前需求)
+    所有提示词 = list
+    var html = ''
+    
+    // 渲染10组提示词
+    list.forEach((item, index) => {
+      html += `
+      <div class="item">
+        <div class="item-text">${index+1}. ${item}</div>
+        <button class="copy-btn" onclick="copyText('${item.replace(/'/g, '&apos;')}', this)">复制</button>
+      </div>`
+    })
+    
+    // 一键复制全部按钮
+    html += `
+    <div class="copy-all-box">
+      <button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部10组</button>
+    </div>`
+    
+    document.getElementById('result').innerHTML = html
+    
+    // 恢复按钮状态
+    btn.disabled = false
+    btn.innerText = "✨ 生成10组提示词"
+  }, 600)
+}
+</script>
+</body>
+</html>
