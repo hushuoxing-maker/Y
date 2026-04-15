@@ -22,29 +22,63 @@ body{
 h1{
   font-size:26px;
   margin-bottom:20px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-input,button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
+.input-group{
+  display: flex;
+  gap: 10px;
+}
+
+input{
+  flex: 1;
+  padding: 15px;
   border-radius:10px;
-  border:none;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #fff;
+  font-size: 16px;
 }
 
 button{
-  background:#2563eb;
+  padding: 15px 30px;
+  border-radius:10px;
+  border:none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color:#fff;
   cursor:pointer;
   font-size:16px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover{
+  opacity: 0.9;
+  transform: scale(1.02);
 }
 
 .card{
   margin-top:15px;
-  padding:15px;
+  padding:20px;
   background:#1e293b;
-  border-radius:12px;
-  line-height:1.6;
+  border-left: 4px solid #f59e0b;
+  border-radius:8px;
+  line-height:1.8;
+  font-size: 14px;
+  color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tag{
+  display: inline-block;
+  padding: 2px 8px;
+  background: #334155;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 5px;
+  color: #94a3b8;
 }
 </style>
 
@@ -54,13 +88,15 @@ button{
 
 <div class="container">
 
-  <h1>古月 · 餐饮小吃门头设计AI智能体 · 全风格生成器</h1>
+  <h1>古月 · 餐饮小吃门头设计AI智能体</h1>
+  <p style="color:#94a3b8; margin-bottom: 20px;">输入品类（如：麻辣烫、柠檬茶、炸鸡），AI将自动生成10组高转化率门头设计方案。</p>
 
-  <input id="input" placeholder="输入行业，例如：奶茶店 / 小吃店 / 麻辣烫">
-
-  <button onclick="生成10组(document.getElementById('input').value)">
-    生成10组不重复门头提示词
-  </button>
+  <div class="input-group">
+    <input id="input" placeholder="输入行业，例如：奶茶店 / 小吃店 / 麻辣烫">
+    <button onclick="生成10组(document.getElementById('input').value)">
+      生成10组不重复提示词
+    </button>
+  </div>
 
   <div id="结果"></div>
 
@@ -68,18 +104,19 @@ button{
 
 <script>
 
+// 核心配置库
 const 配置 = {
-  风格: ["高辨识度门头","爆款餐饮门头","商业街吸客门头","强视觉冲击门头","高转化品牌门头"],
-  材质: ["金属烤漆","铝塑板","亚克力发光字","通体发光字","灯箱结构","立体叠层"],
-  配色: ["红黑对比","橙白高亮","黄灰撞色","深绿米色","红金搭配"],
-  字体: ["粗体发光字","立体雕刻字","品牌强化字体","高对比字体","视觉冲击字体"],
-  构图: ["居中对称","左标右字","横向延展","大字压顶","分层结构"],
-  卖点: ["现炸现卖","祖传配方","网红爆款","排队王","每日现做","手工制作"],
-  产品: ["产品灯箱","大图展示","橱窗展示","食物特写","放大展示"],
-  细节: ["灯带氛围","玻璃贴标","发光边框","LOGO强化","视觉引导"]
+  风格: ["高辨识度门头","爆款餐饮门头","商业街吸客门头","强视觉冲击门头","高转化品牌门头","极简网红风","国潮复古风","赛博朋克风"],
+  材质: ["金属烤漆","铝塑板","亚克力发光字","通体发光字","灯箱结构","立体叠层","防腐木","水泥灰质感","高透玻璃"],
+  配色: ["红黑对比","橙白高亮","黄灰撞色","深绿米色","红金搭配","克莱因蓝+白","黑金奢华","多巴胺粉"],
+  字体: ["粗体发光字","立体雕刻字","品牌强化字体","高对比字体","视觉冲击字体","手写书法体","极简无衬线体"],
+  构图: ["居中对称","左标右字","横向延展","大字压顶","分层结构","满铺式排版","对角线构图"],
+  卖点: ["现炸现卖","祖传配方","网红爆款","排队王","每日现做","手工制作","鲜果现切","秘制酱料"],
+  产品: ["产品灯箱","大图展示","橱窗展示","食物特写","放大展示","动态海报","实物模型"],
+  细节: ["灯带氛围","玻璃贴标","发光边框","LOGO强化","视觉引导","金属包边","投影灯"]
 }
 
-// 🔥 高级渐变系统
+// 高级渐变与光影系统
 const 渐变库 = [
   "金属渐变光泽",
   "霓虹渐变发光边缘",
@@ -90,26 +127,37 @@ const 渐变库 = [
   "深浅灰渐变立体感",
   "透明玻璃渐变反射",
   "霓虹流光渐变边框",
-  "品牌发光渐变LOGO"
+  "品牌发光渐变LOGO",
+  "赛博朋克渐变光",
+  "哑光渐变质感"
 ]
 
-// 随机抽取（消耗式）
+// 随机抽取函数（消耗式，确保不重复）
 function 取(arr){
+  if(arr.length === 0) return "";
   return arr.splice(Math.floor(Math.random()*arr.length),1)[0]
 }
 
-// 🚀 模板系统（商业级）
+// 提示词模板池（3种不同结构，保证多样性）
 const 模板池 = [
-  d => `【爆款门头】${d.需求}，${d.风格}，${d.材质}+${d.材质2}结构，${d.构图}布局，${d.配色}主色，${d.字体}字体，${d.卖点}核心卖点，${d.产品}展示，${d.渐变}光影效果，${d.细节}强化，商业街正立面，8K写实，可施工`,
+  // 模板1：结构化描述
+  d => `【商业门头设计】${d.需求}，${d.风格}，${d.材质}与${d.材质2}结合，${d.构图}布局，主色调${d.配色}，${d.字体}，核心卖点“${d.卖点}”，搭配${d.产品}，${d.渐变}效果，细节${d.细节}，8K超写实渲染，建筑摄影视角`,
 
-  d => `${d.需求}门头设计，${d.风格}风格，${d.构图}结构，${d.材质}材质体系，${d.配色}视觉系统，${d.字体}字体设计，主打${d.卖点}，结合${d.产品}，加入${d.渐变}渐变光效，${d.细节}`,
+  // 模板2：氛围感描述
+  d => `极具吸引力的${d.需求}店面，采用${d.配色}配色方案，${d.风格}。材质上使用${d.材质}，结合${d.渐变}的光影处理。字体设计为${d.字体}，醒目展示“${d.卖点}”。构图采用${d.构图}，并在橱窗展示${d.产品}。细节包含${d.细节}，商业街夜景氛围，高画质。`,
 
-  d => `商业级门头：${d.需求}，${d.风格}视觉体系，${d.材质}+${d.材质2}组合，${d.构图}排版，${d.配色}色彩系统，${d.字体}字体设计，强化${d.卖点}表达，产品${d.产品}，${d.渐变}灯光渐变，${d.细节}`
+  // 模板3：功能化描述
+  d => `设计一个${d.需求}门头，重点突出${d.卖点}。视觉风格为${d.风格}，使用${d.材质}+${d.材质2}双层结构。色彩系统为${d.配色}，字体选用${d.字体}。展示区域包含${d.产品}，配合${d.渐变}提升档次。构图${d.构图}，增加${d.细节}细节，超高精度。`,
+  
+  // 模板4：极简描述
+  d => `${d.需求}招牌设计，${d.构图}，${d.配色}。材质：${d.材质}。字体：${d.字体}。卖点：${d.卖点}。装饰：${d.产品}，${d.渐变}。风格：${d.风格}。`
 ]
 
-// 生成函数（100%去重版本）
+// 生成主函数
 function 生成10组(需求){
+  if(!需求) { alert("请输入行业关键词"); return; }
 
+  // 1. 初始化牌堆（深拷贝，防止污染原配置）
   let 池 = {
     风格:[...配置.风格],
     材质:[...配置.材质],
@@ -122,28 +170,31 @@ function 生成10组(需求){
     渐变:[...渐变库]
   }
 
-  let used = new Set()
+  let used = new Set() // 用于记录已生成的提示词，防止万一重复
   let result = []
 
-  for(let i=0;i<10;i++){
-
+  // 2. 循环生成10组
+  for(let i=0; i<10; i++){
+    
+    // 抽取参数
     let data = {
       需求,
       风格:取(池.风格),
       材质:取(池.材质),
-      材质2:取(池.材质),
+      材质2:取(池.材质), // 抽取第二种材质做组合
       配色:取(池.配色),
       字体:取(池.字体),
-      构图:取(池.构图),
       卖点:取(池.卖点),
       产品:取(池.产品),
       细节:取(池.细节),
       渐变:取(池.渐变)
     }
 
-    let text = (模板池[i % 模板池.length])(data)
+    // 选择模板（循环使用4种模板）
+    let template = 模板池[i % 模板池.length]
+    let text = template(data)
 
-    // 🔥 结构级去重
+    // 去重检查
     if(!used.has(text)){
       used.add(text)
       result.push(text)
@@ -153,14 +204,15 @@ function 生成10组(需求){
   render(result)
 }
 
-// 渲染
+// 渲染结果
 function render(list){
   let html = ""
 
-  list.forEach((t,i)=>{
+  list.forEach((t, i)=>{
     html += `
       <div class="card">
-        ${i+1}. ${t}
+        <div style="margin-bottom:5px; color:#f59e0b; font-weight:bold;">方案 ${i+1}</div>
+        ${t}
       </div>
     `
   })
