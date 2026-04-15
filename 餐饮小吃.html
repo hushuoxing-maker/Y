@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>古月 · 餐饮小吃门头AI智能体</title>
+
+<title>古月 · 餐饮小吃门头设计AI智能体 · 全风格生成器</title>
 
 <style>
 
@@ -21,6 +22,7 @@ body{
   margin:0 auto;
 }
 
+/* 标题渐变 */
 h1{
   font-size:24px;
   background: linear-gradient(90deg,#60a5fa,#a78bfa,#34d399);
@@ -35,6 +37,7 @@ input{
   border-radius:12px;
   border:none;
   margin-top:10px;
+  outline:none;
 }
 
 /* 按钮 */
@@ -50,43 +53,70 @@ button{
   font-size:16px;
 }
 
-/* 卡片 */
-.card{
-  margin-top:12px;
-  padding:14px;
-  border-radius:16px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  border:1px solid rgba(255,255,255,0.1);
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-}
-
-/* 文本 */
-.text{
-  width:85%;
-  line-height:1.6;
-}
-
-/* 复制按钮 */
-.copy-btn{
-  background: linear-gradient(90deg,#f59e0b,#ef4444);
-  border:none;
-  padding:6px 10px;
-  border-radius:10px;
-  color:#fff;
-  cursor:pointer;
-  font-size:12px;
-}
-
+/* 提示 */
 .tip{
   margin-top:10px;
   color:#94a3b8;
   font-size:13px;
 }
 
+/* 🌟 卡片（核心优化） */
+.card{
+  margin-top:12px;
+  padding:14px 45px 14px 14px;
+  border-radius:16px;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border:1px solid rgba(255,255,255,0.1);
+
+  position:relative;
+  line-height:1.6;
+
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+}
+
+/* 文本 */
+.text{
+  font-size:14px;
+  color:#e5e7eb;
+}
+
+/* 🔥 小复制按钮（极简图标） */
+.copy-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+
+  width:26px;
+  height:26px;
+
+  border-radius:6px;
+  border:none;
+
+  background: linear-gradient(135deg,#f59e0b,#ef4444);
+  color:#fff;
+
+  font-size:12px;
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+}
+
+.copy-btn:active{
+  transform:scale(0.85);
+}
+
 </style>
+
 </head>
 
 <body>
@@ -99,7 +129,7 @@ button{
 
 <button onclick="生成()">生成10组提示词</button>
 
-<div class="tip">点击右侧按钮可一键复制</div>
+<div class="tip">点击右上角按钮一键复制提示词</div>
 
 <div id="结果"></div>
 
@@ -107,12 +137,13 @@ button{
 
 <script>
 
+/* ===== 数据池 ===== */
 const 配置 = {
   风格:["高辨识度门头","爆款餐饮门头","商业街吸客门头","强视觉冲击门头","高转化品牌门头"],
   材质:["金属烤漆","铝塑板","亚克力发光字","通体发光字","灯箱结构"],
   配色:["红黑对比","橙白高亮","黄灰撞色","红金搭配"],
   字体:["粗体发光字","立体雕刻字","视觉冲击字体"],
-  构图:["居中对称","左标右字","大字压顶"],
+  构图:["居中对称","左标右字","大字压顶","横向延展"],
   卖点:["现炸现卖","网红爆款","排队王","每日现做"],
   产品:["产品灯箱","橱窗展示","食物特写"],
   细节:["灯带氛围","发光边框","LOGO强化"]
@@ -128,17 +159,17 @@ const 渐变库 = [
   "流光渐变边框"
 ]
 
-// 随机
+/* 随机 */
 function 取(arr){
   return arr.splice(Math.floor(Math.random()*arr.length),1)[0]
 }
 
-// 模板
+/* 模板 */
 function 模板(d){
-  return `【门头设计】${d.需求}，${d.风格}，${d.材质}+${d.材质2}结构，${d.构图}布局，${d.配色}配色，${d.字体}字体，${d.卖点}，${d.产品}展示，${d.渐变}光影效果，${d.细节}，8K可施工级设计`
+  return `【门头设计】${d.需求}，${d.风格}，${d.材质}+${d.材质2}结构，${d.构图}布局，${d.配色}配色，${d.字体}字体，${d.卖点}，${d.产品}展示，${d.渐变}光影效果，${d.细节}，8K写实可施工级设计`
 }
 
-// 生成10组（强制稳定）
+/* 🚀 生成10组（稳定不重复） */
 function 生成(){
 
   let 需求 = document.getElementById("input").value.trim()
@@ -159,7 +190,6 @@ function 生成(){
   let used = new Set()
   let list = []
 
-  // 🔥 强制生成10条
   while(list.length < 10){
 
     let data = {
@@ -187,7 +217,7 @@ function 生成(){
   render(list)
 }
 
-// 渲染 + 复制按钮
+/* ===== 渲染 + 复制按钮 ===== */
 function render(list){
 
   let box = document.getElementById("结果")
@@ -200,14 +230,14 @@ function render(list){
 
     div.innerHTML = `
       <div class="text">${i+1}. ${t}</div>
-      <button class="copy-btn" onclick="copyText(\`${t.replace(/`/g,'')}\`)">复制</button>
+      <button class="copy-btn" onclick="copyText(\`${t.replace(/`/g,'')}\`)">⧉</button>
     `
 
     box.appendChild(div)
   })
 }
 
-// 复制
+/* 复制 */
 function copyText(text){
   navigator.clipboard.writeText(text)
   alert("已复制")
