@@ -1,101 +1,3 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>古月 · 餐饮小吃门头AI智能体</title>
-
-<style>
-
-body{
-  margin:0;
-  font-family:"Microsoft YaHei";
-  background: linear-gradient(135deg,#0f172a,#1e1b4b,#0f766e);
-  color:#fff;
-  padding:20px;
-}
-
-.container{max-width:1100px;margin:0 auto;}
-
-h1{
-  font-size:24px;
-  background: linear-gradient(90deg,#60a5fa,#a78bfa,#34d399);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  margin-top:10px;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  background: linear-gradient(90deg,#2563eb,#7c3aed,#06b6d4);
-  color:white;
-}
-
-.card{
-  margin-top:12px;
-  padding:14px 45px 14px 14px;
-  border-radius:16px;
-  background: rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.1);
-  position:relative;
-}
-
-.text{
-  font-size:14px;
-  line-height:1.6;
-}
-
-.copy-btn{
-  position:absolute;
-  top:10px;
-  right:10px;
-  width:26px;
-  height:26px;
-  border:none;
-  border-radius:6px;
-  background: linear-gradient(135deg,#f59e0b,#ef4444);
-  color:#fff;
-  cursor:pointer;
-}
-
-.tip{
-  margin-top:10px;
-  color:#94a3b8;
-  font-size:13px;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>古月 · 餐饮小吃门头AI智能体</h1>
-
-<input id="input" placeholder="输入行业，例如：奶茶店">
-
-<button id="btn">生成10组提示词</button>
-
-<div class="tip">点击右上角复制按钮</div>
-
-<div id="result"></div>
-
-</div>
-
 <script>
 
 const 配置 = {
@@ -125,10 +27,36 @@ function 模板(d){
   return `【门头设计】${d.需求}，${d.风格}，${d.材质}+${d.材质2}结构，${d.构图}布局，${d.配色}配色，${d.字体}字体，${d.卖点}，${d.产品}展示，${d.渐变}光影效果，${d.细节}，8K写实可施工`
 }
 
-function 生成(){
+/* =========================
+   🚀 核心修复：DOM安全启动
+========================= */
+function init(){
 
-  let 需求 = document.getElementById("input").value.trim()
-  if(!需求) 需求 = "餐饮门头"
+  const btn = document.getElementById("btn")
+  const input = document.getElementById("input")
+
+  if(!btn || !input){
+    console.error("DOM未加载完成")
+    return
+  }
+
+  btn.addEventListener("click", ()=>{
+
+    let 需求 = input.value.trim()
+
+    // 防空
+    if(!需求){
+      需求 = "餐饮门头"
+    }
+
+    生成(需求)
+  })
+}
+
+/* =========================
+   🚀 生成函数（稳定10条）
+========================= */
+function 生成(需求){
 
   let 池 = {
     风格:[...配置.风格],
@@ -172,39 +100,42 @@ function 生成(){
   render(list)
 }
 
+/* =========================
+   🚀 渲染
+========================= */
 function render(list){
 
-  let box = document.getElementById("result")
+  const box = document.getElementById("result")
   box.innerHTML = ""
 
   list.forEach((t,i)=>{
 
-    let card = document.createElement("div")
-    card.className = "card"
+    const div = document.createElement("div")
+    div.className = "card"
 
-    let text = document.createElement("div")
+    const text = document.createElement("div")
     text.className = "text"
-    text.innerText = (i+1) + ". " + t
+    text.innerText = `${i+1}. ${t}`
 
-    let btn = document.createElement("button")
+    const btn = document.createElement("button")
     btn.className = "copy-btn"
     btn.innerText = "⧉"
 
     btn.addEventListener("click", ()=>{
       navigator.clipboard.writeText(t)
       btn.innerText = "✓"
-      setTimeout(()=>btn.innerText="⧉",1000)
+      setTimeout(()=>btn.innerText="⧉",800)
     })
 
-    card.appendChild(text)
-    card.appendChild(btn)
-    box.appendChild(card)
+    div.appendChild(text)
+    div.appendChild(btn)
+    box.appendChild(div)
   })
 }
 
-document.getElementById("btn").addEventListener("click", 生成)
+/* =========================
+   🚀 启动入口（关键修复）
+========================= */
+window.addEventListener("DOMContentLoaded", init)
 
 </script>
-
-</body>
-</html>
